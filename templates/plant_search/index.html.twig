@@ -1,0 +1,113 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rechercher une plante (API) — Plantasia{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="font-heading display-4 mb-4">Rechercher & Importer depuis l'API</h1>
+
+        <form method="get" action="{{ path('app_admin_plant_search') }}" class="row g-2 my-4">
+            <div class="col-md-6">
+                <input type="text" name="q" value="{{ query }}" class="form-control border-0 bg-white shadow-sm" placeholder="Nom de plante (ex: Ficus, Aloe)..." required>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-plantasia-primary">Rechercher</button>
+            </div>
+        </form>
+
+        {% if query is not empty %}
+            <h3 class="font-heading fs-3 mb-3 text-muted">Résultats pour "{{ query }}"</h3>
+            <div class="row">
+                {% for item in results %}
+                    {% set defaultImg = asset('notfound.png') %}
+                    {% set nom = item.common_name ?? item.scientific_name[0] ?? 'Plante inconnue' %}
+
+                    {% set rawImg = null %}
+                    {% if item.default_image is defined and item.default_image is not null %}
+                        {% set rawImg = item.default_image.regular_url
+                            ?? item.default_image.original_url
+                            ?? item.default_image.thumbnail %}
+                    {% endif %}
+
+                    {% set img = (rawImg is not empty) ? rawImg : defaultImg %}
+
+                    {% set desc = item.description
+                        ?? ('Plante de type ' ~ (item.cycle ?? 'vivace') ~ ', arrosage : ' ~ (item.watering ?? 'modéré') ~ '.') %}
+
+                    <div class="col-md-4 mb-4">
+                        <div class="card card-plantasia h-100">
+                            <div class="card-img-wrapper">
+                                <img src="{{ img }}"
+                                     class="card-img-top"
+                                     alt="{{ nom }}"
+                                     style="height: 200px; object-fit: cover;"
+                                     onerror="this.onerror=null; this.src='{{ defaultImg }}';">
+                            </div>
+
+                            <div class="card-body d-flex flex-column justify-content-between p-3">
+                                <div>
+                                    <h5 class="font-heading fs-4 mb-2">{{ nom }}</h5>
+                                    <p class="card-text text-secondary small mb-3">{{ desc }}</p>
+                                </div>
+
+                                <form method="post" action="{{ path('app_admin_plant_import') }}">
+                                    <input type="hidden" name="nom" value="{{ nom }}">
+                                    <input type="hidden" name="image" value="{{ img }}">
+                                    <input type="hidden" name="description" value="{{ desc }}">
+                                    <button type="button" class="btn btn-plantasia-outline w-100 btn-sm btn-add-api">
+                                        Ajouter au catalogue
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="col-12">
+                        <p class="text-muted italic">Aucun résultat trouvé pour cette recherche.</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.querySelectorAll('.btn-add-api').forEach(button => {
+            button.addEventListener('click', async function() {
+                const form = this.closest('form');
+                const url = form.action;
+                const formData = new FormData(form);
+
+                // État de chargement
+                this.disabled = true;
+                this.textContent = 'Ajout en cours...';
+
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        // Bascule vers le style rempli (Primary) conforme à la DA
+                        this.textContent = 'Ajoutée au catalogue';
+                        this.classList.remove('btn-plantasia-outline');
+                        this.classList.add('btn-plantasia-primary');
+                        this.style.pointerEvents = 'none';
+                    } else {
+                        throw new Error();
+                    }
+                } catch (error) {
+                    this.disabled = false;
+                    this.textContent = 'Erreur lors de l\'ajout';
+                }
+            });
+        });
+    </script>
+{% endblock %}

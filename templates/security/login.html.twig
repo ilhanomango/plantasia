@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion — Plantasia{% endblock %}
+
+{% block body %}
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: 70vh;">
+        <div class="card card-plantasia p-4 p-md-5" style="width: 100%; max-width: 420px;">
+            <h1 class="font-heading display-5 text-center mb-1">Bienvenue</h1>
+            <p class="text-muted text-center small mb-4">Connectez-vous à votre espace Plantasia</p>
+
+            {% if error %}
+                <div class="alert alert-danger border-0 small mb-3">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+
+            {% if app.user %}
+                <div class="mb-3 text-center small">
+                    Vous êtes connecté en tant que {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Déconnexion</a>
+                </div>
+            {% endif %}
+
+            <form method="post">
+                <div class="mb-3">
+                    <label for="username" class="form-label small fw-bold">Adresse Email</label>
+                    <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="email" required autofocus placeholder="nom@exemple.fr">
+                </div>
+
+                <div class="mb-4">
+                    <label for="password" class="form-label small fw-bold">Mot de passe</label>
+                    <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required placeholder="••••••••">
+                </div>
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                <button class="btn btn-plantasia-primary w-100 py-2 mb-3" type="submit">
+                    Se connecter
+                </button>
+
+                <p class="text-center small text-muted mb-0">
+                    Pas encore de compte ? <a href="{{ path('app_register') }}" class="text-success fw-bold text-decoration-none">S'inscrire</a>
+                </p>
+            </form>
+        </div>
+    </div>
+{% endblock %}

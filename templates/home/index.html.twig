@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Plantasia — Carnet d'entretien botanique{% endblock %}
+
+{% block body %}
+    <div class="container py-2">
+
+        {# HERO SECTION #}
+        <div class="row align-items-center py-2">
+            <div class="col-lg-7 pe-lg-5 mb-4 mb-lg-0">
+                <h1 class="font-heading display-1 mb-3" style="line-height: 0.95; font-size: clamp(3rem, 6.5vw, 5.2rem);">
+                    L’art de cultiver <br><span class="fst-italic text-secondary">son espace intérieur.</span>
+                </h1>
+
+                <p class="fs-5 text-secondary mb-4" style="max-width: 520px; line-height: 1.6;">
+                    Plantasia rassemble la gestion de vos plantes dans une interface pure. Suivez les rythmes d'arrosage, documentez la pousse et conservez un journal de soins.
+                </p>
+
+                <div class="d-flex flex-wrap gap-3 align-items-center">
+                    <a href="{{ path('app_register') }}" class="btn btn-plantasia-primary py-3 px-4">
+                        S'inscrire
+                    </a>
+                    <a href="{{ path('app_login') }}" class="btn btn-plantasia-outline py-3 px-4">
+                        Se connecter
+                    </a>
+                </div>
+            </div>
+
+            {# COMPOSITION VISUELLE ÉDITORIALE (CADRE D'EXPOSITION) #}
+            <div class="col-lg-5">
+                <div class="card-plantasia position-relative p-2 bg-white">
+                    <div class="card-img-wrapper" style="height: 380px;">
+                        <img src="https://images.unsplash.com/photo-1545241047-6083a3684587?q=80&w=1000&auto=format&fit=crop"
+                             alt="Plantasia Botanical Specimen"
+                             class="card-img-top h-100 w-100"
+                             style="object-fit: cover;">
+                    </div>
+                    <div class="p-3 d-flex justify-content-between align-items-center border-top bg-white">
+                        <span class="font-heading fs-4 mb-0">Monstera Deliciosa</span>
+                        <span class="text-muted small">Spécimen N° 01</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# PILIERS AVEC NUMÉROTATION ÉDITORIALE #}
+        <div class="border-top pt-4 mt-3">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="d-flex align-items-start gap-3">
+                        <span class="font-heading display-2 text-muted" style="line-height: 0.75;">1.</span>
+                        <div>
+                            <h3 class="font-heading fs-2 mb-2">Suivi d'arrosage</h3>
+                            <p class="text-secondary small mb-0">
+                                Un calcul précis des jours restants avant chaque arrosage selon la fréquence propre à chaque plante.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="d-flex align-items-start gap-3">
+                        <span class="font-heading display-2 text-muted" style="line-height: 0.75;">2.</span>
+                        <div>
+                            <h3 class="font-heading fs-2 mb-2">Galerie d’évolution</h3>
+                            <p class="text-secondary small mb-0">
+                                Un historique visuel photo par photo pour observer le développement au fil des saisons.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="d-flex align-items-start gap-3">
+                        <span class="font-heading display-2 text-muted" style="line-height: 0.75;">3.</span>
+                        <div>
+                            <h3 class="font-heading fs-2 mb-2">Journal d'entretien</h3>
+                            <p class="text-secondary small mb-0">
+                                Un espace de remarques pour consigner rempotages, traitements et observations du quotidien.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

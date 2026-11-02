@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Administration — Plantasia{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="mb-4">Panneau d'administration</h1>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card text-white bg-primary mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Utilisateurs</h5>
+                        <p class="card-text display-6">{{ totalUsers }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-white bg-success mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Plantes au catalogue</h5>
+                        <p class="card-text display-6">{{ totalPlantes }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-white bg-info mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Plantes en possession</h5>
+                        <p class="card-text display-6">{{ totalUserPlantes }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-4">
+        <a href="{{ path('app_admin_plantes_index') }}" class="btn btn-outline-primary mb-3">Gérer la liste du catalogue</a>
+        <hr class="my-4">
+
+        <h3>Endpoints API JSON (Zone Admin)</h3>
+        <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Statistiques globales
+                <a href="{{ path('app_admin_api_stats') }}" target="_blank" class="btn btn-sm btn-outline-secondary">Tester /admin/api/stats</a>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Liste complète du catalogue (JSON)
+                <a href="{{ path('app_admin_api_plantes') }}" target="_blank" class="btn btn-sm btn-outline-secondary">Tester /admin/api/plantes</a>
+            </li>
+        </ul>
+    </div>
+{% endblock %}
