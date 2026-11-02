@@ -1,4 +1,3 @@
-
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
@@ -18,3 +17,32 @@
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
+###> Plantasia Custom Exclusions ###
+# Fichiers uploadés par les utilisateurs (photos de plantes)
+/public/uploads/*
+!/public/uploads/.gitkeep
+
+# IDE & Editeurs (PhpStorm / VS Code)
+/.idea/
+/.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# Fichiers système (macOS & Windows)
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Fichiers de log et bases locales
+/*.log
+/*.sqlite
+/*.db
+###< Plantasia Custom Exclusions ###
