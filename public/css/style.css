@@ -1,0 +1,206 @@
+/* ==========================================================================
+   PLANTASIA DESIGN SYSTEM — CSS VARIABLES
+   ========================================================================== */
+:root {
+    /* Palette de couleurs */
+    --color-bg: #f8f7f4;                 /* Fond crème / papier brut */
+    --color-surface: #ffffff;            /* Fond des cartes / modales */
+    --color-text-main: #1d241f;          /* Texte sombre charbon */
+    --color-text-muted: #626d65;         /* Texte secondaire neutre */
+
+    --color-brand-primary: #233e2e;      /* Vert forêt profond */
+    --color-brand-hover: #16281d;        /* Vert survol */
+    --color-brand-accent: #88a78e;       /* Vert sauge doux */
+    --color-brand-light: #edf3ee;        /* Vert très clair pour badges/fonds */
+
+    --color-alert-warning: #e09f3e;      /* Ambre / Arrosage proche */
+    --color-alert-danger: #9e3a2b;       /* Terre cuite / Retard d'arrosage */
+    --color-border: #e2e6e3;             /* Bordure subtile */
+
+    /* Typographie */
+    --font-heading: 'Instrument Serif', Georgia, serif;
+    --font-body: 'Plus Jakarta Sans', -apple-system, sans-serif;
+
+    /* Transitions */
+    --transition-smooth: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   STYLES GLOBAUX
+   ========================================================================== */
+body {
+    background-color: var(--color-bg);
+    color: var(--color-text-main);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, .font-heading {
+    font-family: var(--font-heading);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+}
+
+h1 { font-size: 2.75rem; }
+h2 { font-size: 2.1rem; }
+h3 { font-size: 1.5rem; }
+
+/* ==========================================================================
+   NAVBAR SUR MESURE
+   ========================================================================== */
+.navbar-plantasia {
+    background: rgba(248, 247, 244, 0.85) !important;
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-border);
+    padding: 1rem 0;
+}
+
+.navbar-plantasia .navbar-brand {
+    font-family: var(--font-heading);
+    font-size: 1.75rem;
+    color: var(--color-brand-primary) !important;
+}
+
+.navbar-plantasia .nav-link {
+    color: var(--color-text-main) !important;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: var(--transition-smooth);
+}
+
+.navbar-plantasia .nav-link:hover {
+    color: var(--color-brand-accent) !important;
+}
+
+/* ==========================================================================
+   CARTES DE PLANTES (SANS BORDER RADIUS & SANS SHADOW)
+   ========================================================================== */
+.card-plantasia {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 0 !important; /* Retrait de tous les border-radius */
+    box-shadow: none !important; /* Retrait de toutes les ombres */
+    overflow: hidden;
+    transition: var(--transition-smooth);
+}
+
+/* Conteneur d'image */
+.card-img-wrapper {
+    overflow: hidden;
+    position: relative;
+}
+
+.card-plantasia .card-img-top {
+    border-radius: 0 !important;
+    border-bottom: 1px solid var(--color-border);
+    transition: var(--transition-smooth);
+}
+
+/* EFFET HOVER UNIQUEMENT SUR LES CARTES CLIQUABLES */
+.card-clickable {
+    cursor: pointer;
+}
+
+.card-clickable:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-brand-accent);
+}
+
+.card-clickable:hover .card-img-top {
+    transform: scale(1.03);
+}
+
+/* ==========================================================================
+   BOUTONS & ANIMATIONS HOVER (FILL LEFT TO RIGHT)
+   ========================================================================== */
+
+.btn-plantasia-primary,
+.btn-plantasia-outline {
+    border-radius: 0 !important;
+    font-weight: 500;
+    background-size: 200% 100% !important;
+    background-position: 100% 0 !important;
+    background-color: transparent !important;
+    transition: background-position 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+    color 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+    border-color 0.4s cubic-bezier(0.25, 1, 0.5, 1) !important;
+}
+
+/* --- 1. BOUTON OUTLINE (Ex: Déconnexion, Fiche & Suivi, Ajouter au jardin) --- */
+.btn-plantasia-outline {
+    background-image: linear-gradient(to right, var(--color-brand-primary) 50%, transparent 50%) !important;
+    color: var(--color-brand-primary) !important;
+    border: 1px solid var(--color-brand-primary) !important;
+    padding: 0.4rem 1rem;
+    font-size: 0.85rem;
+}
+
+.btn-plantasia-outline:hover,
+.btn-plantasia-outline:focus {
+    background-position: 0 0 !important;
+    color: #ffffff !important;
+}
+
+/* --- 2. BOUTON PRIMARY (Ex: Inscription, Connexion, Rechercher) --- */
+.btn-plantasia-primary {
+    background-image: linear-gradient(to right, var(--color-bg) 50%, var(--color-brand-primary) 50%) !important;
+    color: #ffffff !important;
+    border: 1px solid var(--color-brand-primary) !important;
+    padding: 0.5rem 1.25rem;
+    font-size: 0.9rem;
+}
+
+.btn-plantasia-primary:hover,
+.btn-plantasia-primary:focus {
+    background-position: 0 0 !important;
+    color: var(--color-brand-primary) !important;
+}
+
+/* ==========================================================================
+   ICÔNES & BADGES D'ARROSAGE (BLEU & CONTRASTE RENFORCÉ)
+   ========================================================================== */
+
+/* Couleur bleue pour toutes les gouttes d'eau SVG */
+.fa-droplet {
+    color: #2563eb !important; /* Bleu cyan / eau vif */
+}
+
+/* Badges J-? avec fort contraste */
+.badge-water {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.4em 0.75em;
+    border-radius: 0 !important;
+    border: 1px solid transparent;
+}
+
+/* Statut OK (J-2, J-5, etc.) */
+.badge-water-ok {
+    background-color: #e0f2fe !important; /* Fond bleu d'eau très clair */
+    color: #0369a1 !important;            /* Texte bleu foncé lisible */
+    border-color: #bae6fd !important;
+}
+
+/* Statut Proche (Demain / Aujourd'hui) */
+.badge-water-warning {
+    background-color: #fef3c7 !important; /* Fond ambre clair */
+    color: #92400e !important;            /* Texte ambre foncé */
+    border-color: #fde68a !important;
+}
+
+/* Statut Retard */
+.badge-water-danger {
+    background-color: #fee2e2 !important; /* Fond rouge clair */
+    color: #991b1b !important;            /* Texte rouge foncé */
+    border-color: #fca5a5 !important;
+}
+
+/* Couleur rouge terre cuite pour les épingles de localisation */
+.fa-map-pin {
+    color: var(--color-alert-danger) !important;
+    margin-right: 2px !important;
+}

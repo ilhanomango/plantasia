@@ -1,0 +1,157 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ userPlante.surnom ?: userPlante.plante.nom }} — Suivi{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <a href="{{ path('app_user_plante_index') }}" class="btn btn-sm btn-light border mb-4">&larr; Retour à mon jardin</a>
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success border-0 shadow-sm mb-4">{{ message }}</div>
+        {% endfor %}
+        {% for message in app.flashes('danger') %}
+            <div class="alert alert-danger border-0 shadow-sm mb-4">{{ message }}</div>
+        {% endfor %}
+
+        <!-- Carte principale d'information -->
+        <div class="card card-plantasia mb-5 overflow-hidden">
+            <div class="row g-0 align-items-center">
+                <div class="col-md-4">
+                    <img src="{{ userPlante.plante.image }}" class="img-fluid w-100" style="height: 320px; object-fit: cover;" onerror="this.src='{{ asset('notfound.png') }}';">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h2 class="font-heading display-5 mb-0">{{ userPlante.surnom ?: userPlante.plante.nom }}</h2>
+
+                            {% if userPlante.joursRestants is not null %}
+                                {% if userPlante.joursRestants > 1 %}
+                                    <span class="badge badge-water badge-water-ok"><i class="fa-solid fa-droplet"></i> J-{{ userPlante.joursRestants }}</span>
+                                {% elseif userPlante.joursRestants == 1 %}
+                                    <span class="badge badge-water badge-water-warning"><i class="fa-solid fa-droplet"></i> Demain !</span>
+                                {% elseif userPlante.joursRestants == 0 %}
+                                    <span class="badge badge-water badge-water-warning"><i class="fa-solid fa-droplet"></i> Aujourd'hui !</span>
+                                {% else %}
+                                    <span class="badge badge-water badge-water-danger"><i class="fa-solid fa-droplet"></i> Retard ({{ userPlante.joursRestants|abs }}j)</span>
+                                {% endif %}
+                            {% elseif userPlante.frequenceArrosage is null %}
+                                <span class="badge bg-light text-muted border">Fréquence non définie</span>
+                            {% else %}
+                                <span class="badge bg-light text-muted border">Jamais arrosée</span>
+                            {% endif %}
+                        </div>
+
+                        <p class="text-muted mb-3">
+                            Espèce : <em>{{ userPlante.plante.nom }}</em>
+                            {% if userPlante.emplacement %}
+                                &bull; <i class="fa-solid fa-map-pin"></i> <strong>{{ userPlante.emplacement }}</strong>
+                            {% endif %}
+                        </p>
+
+                        <details class="mb-3">
+                            <summary class="btn btn-sm btn-link p-0 text-decoration-none text-muted"><i class="fa-solid fa-pen-to-square"></i> Personnaliser le nom / l'emplacement</summary>
+                            <form method="post" class="row g-2 mt-2 bg-light p-3 rounded-0 border">
+                                <input type="hidden" name="update_info" value="1">
+                                <div class="col-md-6">
+                                    <input type="text" name="surnom" class="form-control form-control-sm" value="{{ userPlante.surnom }}" placeholder="Surnom (ex: Grande Monstera)">
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" name="emplacement" class="form-control form-control-sm" value="{{ userPlante.emplacement ?? '' }}" placeholder="Emplacement (ex: Salon)">
+                                </div>
+                                <div class="col-12 text-end mt-2">
+                                    <button type="submit" class="btn btn-sm btn-plantasia-primary">Enregistrer</button>
+                                </div>
+                            </form>
+                        </details>
+
+                        <p class="card-text text-secondary small mb-3">{{ userPlante.plante.description }}</p>
+
+                        <p class="card-text mb-3 small">
+                            <strong>Dernier arrosage :</strong>
+                            {{ userPlante.dernierArrosage ? userPlante.dernierArrosage|date('d/m/Y H:i') : 'Aucun arrosage enregistré' }}
+                        </p>
+
+                        <form method="post" class="row g-2 align-items-center border-top pt-3">
+                            <div class="col-auto">
+                                <label class="col-form-label fw-bold small">Arroser tous les :</label>
+                            </div>
+                            <div class="col-auto">
+                                <div class="input-group input-group-sm">
+                                    <input type="number" name="frequence_arrosage" class="form-control" value="{{ userPlante.frequenceArrosage }}" min="1" placeholder="Ex: 7" required>
+                                    <span class="input-group-text bg-light">jours</span>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <button type="submit" class="btn btn-sm btn-plantasia-outline">Enregistrer</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Galerie Photo -->
+            <div class="col-md-6 mb-4">
+                <div class="card card-plantasia h-100 p-3">
+                    <h4 class="font-heading fs-3 mb-3">Galerie d'évolution</h4>
+
+                    <form method="post" enctype="multipart/form-data" class="mb-4">
+                        <div class="input-group input-group-sm">
+                            <input type="file" name="photo_file" class="form-control" accept="image/*" required>
+                            <button class="btn btn-plantasia-primary" type="submit">Ajouter</button>
+                        </div>
+                    </form>
+
+                    <div class="row g-3">
+                        {% for photo in userPlante.userPlantePhotos|sort((a, b) => b.createdAt <=> a.createdAt) %}
+                            <div class="col-6">
+                                <div class="card h-100 border shadow-sm rounded-0">
+                                    <img src="{{ asset(photo.imagePath) }}" class="card-img-top" style="height: 140px; object-fit: cover;">
+                                    <div class="card-footer bg-white p-2 d-flex justify-content-between align-items-center text-muted small border-top-0">
+                                        <span>{{ photo.createdAt|date('d/m/Y') }}</span>
+                                        <form method="post" action="{{ path('app_user_plante_photo_delete', {id: photo.id}) }}" onsubmit="return confirm('Supprimer cette photo ?');">
+                                            <button type="submit" class="btn btn-link text-danger p-0 border-0" title="Supprimer"><i class="fa-solid fa-trash"></i></button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <p class="text-muted small italic">Aucune photo de suivi pour l'instant.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Journal de notes -->
+            <div class="col-md-6 mb-4">
+                <div class="card card-plantasia h-100 p-3">
+                    <h4 class="font-heading fs-3 mb-3">Journal d'entretien</h4>
+
+                    <form method="post" class="mb-4">
+                        <div class="mb-2">
+                            <textarea name="note_content" class="form-control form-control-sm" rows="3" placeholder="Ex: Rempotage effectué, nouvelle feuille..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-plantasia-primary w-100 btn-sm">Ajouter la note</button>
+                    </form>
+
+                    <ul class="list-group list-group-flush">
+                        {% for note in userPlante.userPlanteNotes|sort((a, b) => b.createdAt <=> a.createdAt) %}
+                            <li class="list-group-item px-0 bg-transparent">
+                                <div class="d-flex justify-content-between align-items-center text-muted small mb-1">
+                                    <span>{{ note.createdAt|date('d/m/Y à H:i') }}</span>
+                                    <form method="post" action="{{ path('app_user_plante_note_delete', {id: note.id}) }}" onsubmit="return confirm('Supprimer cette note ?');">
+                                        <button type="submit" class="btn btn-link text-danger p-0 border-0" title="Supprimer"><i class="fa-solid fa-trash"></i></button>
+                                    </form>
+                                </div>
+                                <p class="mb-0 text-break small">{{ note.content }}</p>
+                            </li>
+                        {% else %}
+                            <p class="text-muted small italic">Aucune note enregistrée.</p>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
