@@ -23,14 +23,14 @@ class AppFixtures extends Fixture
         $admin->setPassword($this->hasher->hashPassword($admin, 'admin123'));
         $manager->persist($admin);
 
-        // 2. Création d'un utilisateur standard
+        // Création d'un utilisateur classique
         $user = new User();
         $user->setEmail('user@plantasia.fr');
         $user->setRoles(['ROLE_USER']);
         $user->setPassword($this->hasher->hashPassword($user, 'user123'));
         $manager->persist($user);
 
-        // 3. Création de quelques plantes du catalogue
+        // Création de quelques plantes du catalogue
         $plantesData = [
             [
                 'nom' => 'Monstera Deliciosa',
@@ -59,7 +59,7 @@ class AppFixtures extends Fixture
             $plantesEntities[] = $plante;
         }
 
-        // 4. Ajouter une plante à la collection de l'utilisateur standard
+        // Ajouter une plante à la collection du user
         $userPlante = new UserPlante();
         $userPlante->setUser($user);
         $userPlante->setPlante($plantesEntities[0]); // Monstera

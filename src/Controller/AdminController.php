@@ -72,7 +72,7 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('app_admin_plantes_index');
     }
 
-    // --- Routes API JSON ---
+    // Routes API JSON
 
     #[Route('/api/stats', name: 'app_admin_api_stats', methods: ['GET'])]
     public function apiStats(UserRepository $userRepo, PlantesRepository $plantesRepo, UserPlanteRepository $userPlanteRepo): JsonResponse
